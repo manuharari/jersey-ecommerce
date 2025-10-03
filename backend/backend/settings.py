@@ -35,10 +35,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # --- Required for DRF and JWT ---
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
-    'shop', # <-- CRITICAL: Ensure this line is PRESENT and UNCOMMENTED
+    # ---
+    'shop', # <-- Make sure this line is present
 ]
 
 MIDDLEWARE = [
@@ -126,12 +128,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static') # Where collectstatic puts files 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CORS settings (Update for your frontend's dev server URL)
+# CORS settings
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # Vite default port - This is crucial for React dev server
+    "http://localhost:5173",  # Vite default port
     "http://127.0.0.1:5173",
-    # Add your frontend's production URL here later, e.g.:
-    # "https://yourdomain.com",
 ]
 
 # ... (rest of settings.py) ...
@@ -141,13 +141,12 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    # Explicitly remove DEFAULT_PERMISSION_CLASSES to avoid global restrictions
-    # Permissions are now handled per-view in views.py
+    # --- REMOVE or COMMENT OUT this line ---
     # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework.permissions.IsAuthenticated', # <-- REMOVE or COMMENT OUT this global setting
+    #     'rest_framework.permissions.IsAuthenticated',
     # ],
+    # ---------
 }
-
 # ... (rest of settings.py) ...
 
 # JWT settings

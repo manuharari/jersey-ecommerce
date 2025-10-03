@@ -2,12 +2,12 @@
 from rest_framework import generics, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny # Ensure AllowAny is imported
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.http import JsonResponse
 import requests
 import json
-from .models import Product, Order
+from .models import Product, Order # Import OrderItem if you have it
 from .serializers import ProductSerializer, OrderSerializer
 
 
@@ -92,28 +92,28 @@ def generate_ai_description(request):
         # Get product details from request
         product_name = request.data.get('name', '')
         product_category = request.data.get('category', '')
-        
+
         # Prepare prompt for Ollama
         prompt = f"""
         Generate a compelling product description for a {product_category} product named {product_name}.
         The description should be professional, engaging, and highlight key features.
         Keep it concise but informative.
         """
-        
+
         # Prepare data for Ollama API
         ollama_data = {
             'model': 'llama2',  # Default model, can be changed
             'prompt': prompt,
             'stream': False
         }
-        
+
         # Make request to Ollama API
         response = requests.post(
             'http://localhost:11434/api/generate',
             json=ollama_data,
             headers={'Content-Type': 'application/json'}
         )
-        
+
         if response.status_code == 200:
             result = response.json()
             ai_description = result.get('response', 'No description generated')
@@ -123,7 +123,7 @@ def generate_ai_description(request):
                 {'error': 'Failed to generate description'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-            
+
     except Exception as e:
         return Response(
             {'error': str(e)},
