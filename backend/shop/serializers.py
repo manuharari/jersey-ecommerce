@@ -1,6 +1,5 @@
-# ecommerce-platform/backend/shop/serializers.py
 from rest_framework import serializers
-from .models import Product, Order # Make sure to import the models correctly
+from .models import Product, Order # Import OrderItem if you have it
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -45,9 +44,16 @@ class OrderSerializer(serializers.ModelSerializer):
         # Handle nested item creation if you have OrderItemSerializer
         # items_data = validated_data.pop('items', [])
         order = Order.objects.create(**validated_data)
-
-        # if items_data:
-        #     for item_data in items_data:
+        
+        # Associate order with user if authenticated
+        user = self.context['request'].user
+        if user.is_authenticated:
+            order.user = user
+            order.save()
+        # else: Anonymous order, user remains None
+        
+        # if items_
+        #     for item_data in items_
         #         OrderItem.objects.create(order=order, **item_data)
 
         return order

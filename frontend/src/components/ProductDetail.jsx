@@ -1,31 +1,55 @@
+// frontend/src/components/ProductDetail.jsx
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const ProductDetail = ({ addToCart }) => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchProduct();
-  }, [id]);
+    const fetchProduct = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await axios.get(`/products/${id}/`);
+        setProduct(response.data);
+      } catch (err) {
+        console.error('Error fetching product:', err);
+        setError(`Failed to load product: ${err.message}`);
+        // Optionally navigate back if product not found
+        // if (err.response && err.response.status === 404) {
+        //   navigate('/');
+        // }
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const fetchProduct = async () => {
-    try {
-      const response = await axios.get(`/products/${id}/`);
-      setProduct(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching product:', error);
-      setLoading(false);
+    if (id) {
+      fetchProduct();
     }
-  };
+  }, [id, navigate]);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-2xl">Loading product...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-2xl text-red-500 p-4 bg-red-100 rounded-lg">
+          <p className="mb-2 font-bold">Oops!</p>
+          <p>{error}</p>
+          <p className="mt-2 text-sm">Please check the browser console (F12) for more details.</p>
+        </div>
       </div>
     );
   }
@@ -76,7 +100,7 @@ const ProductDetail = ({ addToCart }) => {
               className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-semibold flex items-center justify-center"
               onClick={() => {
                 addToCart(product);
-                window.location.href = '/cart';
+                navigate('/cart'); // Navigate to cart after adding
               }}
             >
               <i className="fas fa-shopping-cart mr-2"></i> Add to Cart

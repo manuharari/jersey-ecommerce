@@ -1,4 +1,4 @@
-# ecommerce-platform/backend/shop/views.py
+# shop/views.py
 from rest_framework import generics, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -7,11 +7,10 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from django.http import JsonResponse
 import requests
 import json
-from .models import Product, Order # Import OrderItem if you have it
+from .models import Product, Order
 from .serializers import ProductSerializer, OrderSerializer
 
 
-# --- Separate Views for Listing (GET) and Creating (POST) ---
 class ProductListView(generics.ListAPIView):
     """
     API endpoint for listing products.
@@ -58,10 +57,15 @@ class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
 class OrderCreateView(generics.CreateAPIView):
     """
     API endpoint for creating orders.
-    Requires authentication (users must be logged in to place an order).
+    Allows authenticated and anonymous users.
     """
     serializer_class = OrderSerializer
-    permission_classes = [IsAuthenticated] # Orders require a logged-in user
+    permission_classes = [AllowAny] # Allow anyone to create an order
+
+    def perform_create(self, serializer):
+        # This is called before serializer.save()
+        # The user association logic is now in the serializer's create method
+        serializer.save()
 
 
 class OrderDetailView(generics.RetrieveAPIView):
@@ -92,28 +96,28 @@ def generate_ai_description(request):
         # Get product details from request
         product_name = request.data.get('name', '')
         product_category = request.data.get('category', '')
-
+        
         # Prepare prompt for Ollama
         prompt = f"""
         Generate a compelling product description for a {product_category} product named {product_name}.
         The description should be professional, engaging, and highlight key features.
         Keep it concise but informative.
         """
-
+        
         # Prepare data for Ollama API
         ollama_data = {
             'model': 'llama2',  # Default model, can be changed
             'prompt': prompt,
             'stream': False
         }
-
+        
         # Make request to Ollama API
         response = requests.post(
             'http://localhost:11434/api/generate',
             json=ollama_data,
             headers={'Content-Type': 'application/json'}
         )
-
+        
         if response.status_code == 200:
             result = response.json()
             ai_description = result.get('response', 'No description generated')
@@ -123,7 +127,7 @@ def generate_ai_description(request):
                 {'error': 'Failed to generate description'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-
+            
     except Exception as e:
         return Response(
             {'error': str(e)},

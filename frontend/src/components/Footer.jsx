@@ -1,3 +1,4 @@
+// frontend/src/components/Footer.jsx
 import React from 'react';
 
 const Footer = () => {
@@ -40,7 +41,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="border-t border-blue-700 mt-8 pt-8 text-center text-blue-300">
-          <p>&copy; 2023 JERSEYS MUNDIAL. Officially licensed FIFA World Cup 2026 merchandise.</p>
+          <p>&copy; 2025 JERSEYS MUNDIAL. Officially licensed FIFA World Cup 2026 merchandise.</p>
         </div>
       </div>
     </footer>

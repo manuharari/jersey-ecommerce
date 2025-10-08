@@ -9,7 +9,7 @@ import os
 from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent.parent # Updated to point to the outer backend/ directory
+BASE_DIR = Path(__file__).resolve().parent.parent.parent # Points to the outer 'backend' directory
 
 
 # Quick-start development settings - unsuitable for production
@@ -27,7 +27,6 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1'] # Add your local IP if needed, or '*'
 
 # Application definition
 
-# ecommerce-platform/backend/backend/settings.py (relevant part)
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,7 +39,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     # ---
-    'shop', # <-- Make sure this line is present
+    'shop', # <-- Make sure this is included
 ]
 
 MIDDLEWARE = [
@@ -128,26 +127,24 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static') # Where collectstatic puts files 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CORS settings
+# CORS settings (Update for your frontend's dev server URL)
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # Vite default port
+    "http://localhost:5173",  # Vite default port - This is crucial for React dev server
     "http://127.0.0.1:5173",
+    # Add your frontend's production URL here later, e.g.:
+    # "https://yourdomain.com",
 ]
-
-# ... (rest of settings.py) ...
 
 # REST Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    # --- REMOVE or COMMENT OUT this line ---
+    # Removed DEFAULT_PERMISSION_CLASSES here, will be handled in views.py
     # 'DEFAULT_PERMISSION_CLASSES': [
     #     'rest_framework.permissions.IsAuthenticated',
     # ],
-    # ---------
 }
-# ... (rest of settings.py) ...
 
 # JWT settings
 SIMPLE_JWT = {
