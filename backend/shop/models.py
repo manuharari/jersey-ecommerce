@@ -1,3 +1,4 @@
+# ecommerce-platform/backend/shop/models.py
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -7,12 +8,38 @@ class Product(models.Model):
     Product model for the e-commerce store.
     Contains information about each product.
     """
+    GENDER_CHOICES = [
+        ('men', 'Men'),
+        ('women', 'Women'),
+        ('kids', 'Kids'),
+        ('unisex', 'Unisex'),
+    ]
+
+    CONFEDERATION_CHOICES = [
+        ('CONMEBOL', 'CONMEBOL'),
+        ('UEFA', 'UEFA'),
+        ('CONCACAF', 'CONCACAF'),
+        ('CAF', 'CAF'),
+        ('AFC', 'AFC'),
+        ('OFC', 'OFC'),
+    ]
+
+    CATEGORY_CHOICES = [
+        ('Home', 'Home'),
+        ('Away', 'Away'),
+        ('Third', 'Third'),
+        ('Accessory', 'Accessory'),
+    ]
+
     name = models.CharField(max_length=200)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField()
     image_url = models.URLField()
-    category = models.CharField(max_length=100)
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='Home')
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, default='unisex')
+    team = models.CharField(max_length=100, blank=True, null=True)
+    confederation = models.CharField(max_length=10, choices=CONFEDERATION_CHOICES, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

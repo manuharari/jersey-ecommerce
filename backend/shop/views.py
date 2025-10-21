@@ -1,4 +1,4 @@
-# shop/views.py
+# ecommerce-platform/backend/shop/views.py
 from rest_framework import generics, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -7,10 +7,11 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from django.http import JsonResponse
 import requests
 import json
-from .models import Product, Order
+from .models import Product, Order # Import OrderItem if you have it
 from .serializers import ProductSerializer, OrderSerializer
 
 
+# --- Separate Views for Listing (GET) and Creating (POST) ---
 class ProductListView(generics.ListAPIView):
     """
     API endpoint for listing products.
@@ -57,15 +58,10 @@ class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
 class OrderCreateView(generics.CreateAPIView):
     """
     API endpoint for creating orders.
-    Allows authenticated and anonymous users.
+    Requires authentication (users must be logged in to place an order).
     """
     serializer_class = OrderSerializer
-    permission_classes = [AllowAny] # Allow anyone to create an order
-
-    def perform_create(self, serializer):
-        # This is called before serializer.save()
-        # The user association logic is now in the serializer's create method
-        serializer.save()
+    permission_classes = [IsAuthenticated] # Orders require a logged-in user
 
 
 class OrderDetailView(generics.RetrieveAPIView):

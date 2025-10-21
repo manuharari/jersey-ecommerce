@@ -39,10 +39,10 @@ const AdminDashboard = () => {
         ]);
         setProducts(productsRes.data);
         // setOrders(ordersRes.data);
+        setLoading(false);
       } catch (err) {
         console.error('Error fetching admin data:', err);
         setError('Failed to load dashboard data.');
-      } finally {
         setLoading(false);
       }
     };
@@ -183,7 +183,7 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-2xl">Loading dashboard...</div>
       </div>
     );
@@ -191,7 +191,7 @@ const AdminDashboard = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-2xl text-red-500 p-4 bg-red-100 rounded-lg">
           {error}
         </div>
@@ -413,7 +413,7 @@ const AdminDashboard = () => {
                       </button>
                       <button 
                         type="submit"
-                        className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                        className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                       >
                         {editingProductId ? 'Update Jersey' : 'Add Jersey'}
                       </button>
@@ -501,7 +501,7 @@ const AdminDashboard = () => {
                         />
                       </div>
                       <button 
-                        className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center"
+                        className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center"
                         onClick={handleGenerateAiDescription}
                         disabled={aiLoading}
                       >

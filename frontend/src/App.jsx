@@ -7,8 +7,8 @@ import ProductDetail from './components/ProductDetail';
 import Cart from './components/Cart';
 import Checkout from './components/Checkout';
 import AdminDashboard from './components/AdminDashboard';
-import CustomerLogin from './components/CustomerLogin'; // New Customer Login
-import CustomerRegister from './components/CustomerRegister'; // New Customer Register
+import CustomerLogin from './components/CustomerLogin'; // Import Customer Login
+import CustomerRegister from './components/CustomerRegister'; // Import Customer Register
 import Login from './components/Login'; // Generic or Admin Login (decide its role)
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -27,6 +27,7 @@ function App() {
     if (token) {
       // Verify token and get user info (in a real app, make a request)
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
       // For now, just set a mock user based on token presence
       // A real app would decode the token or make a /me request
       try {

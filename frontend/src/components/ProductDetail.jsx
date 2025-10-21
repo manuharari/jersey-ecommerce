@@ -19,7 +19,7 @@ const ProductDetail = ({ addToCart }) => {
         setProduct(response.data);
       } catch (err) {
         console.error('Error fetching product:', err);
-        setError(`Failed to load product: ${err.message}`);
+        setError(`Failed to load product: ${err.response?.data?.detail || err.message}`);
         // Optionally navigate back if product not found
         // if (err.response && err.response.status === 404) {
         //   navigate('/');
@@ -66,7 +66,7 @@ const ProductDetail = ({ addToCart }) => {
     <div className="max-w-6xl mx-auto">
       <Link 
         to="/"
-        className="mb-6 text-blue-600 hover:underline flex items-center"
+        className="mb-6 text-primary hover:underline flex items-center"
       >
         <i className="fas fa-arrow-left mr-2"></i> Back to Jerseys
       </Link>
@@ -84,7 +84,7 @@ const ProductDetail = ({ addToCart }) => {
           </div>
           <div className="md:w-1/2 p-8">
             <div className="flex items-center mb-2">
-              <span className="text-2xl font-bold text-blue-600">${product.price}</span>
+              <span className="text-2xl font-bold text-primary">${product.price}</span>
               <span className="ml-4 px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
                 In Stock: {product.stock}
               </span>
@@ -97,10 +97,10 @@ const ProductDetail = ({ addToCart }) => {
             </div>
             
             <button 
-              className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-semibold flex items-center justify-center"
+              className="w-full bg-primary text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-semibold flex items-center justify-center"
               onClick={() => {
                 addToCart(product);
-                navigate('/cart'); // Navigate to cart after adding
+                navigate('/cart');
               }}
             >
               <i className="fas fa-shopping-cart mr-2"></i> Add to Cart

@@ -1,3 +1,4 @@
+# ecommerce-platform/backend/shop/serializers.py
 from rest_framework import serializers
 from .models import Product, Order # Import OrderItem if you have it
 

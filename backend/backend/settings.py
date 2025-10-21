@@ -1,3 +1,4 @@
+# ecommerce-platform/backend/backend/settings.py
 """
 Django settings for backend project.
 
@@ -9,7 +10,7 @@ import os
 from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent.parent # Points to the outer 'backend' directory
+BASE_DIR = Path(__file__).resolve().parent.parent.parent # Points to the outer backend/ directory
 
 
 # Quick-start development settings - unsuitable for production
@@ -34,16 +35,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # --- Required for DRF and JWT ---
+    # --- Required for DRF, JWT, and CORS ---
     'rest_framework',
     'rest_framework_simplejwt',
-    'corsheaders',
+    'corsheaders', # <-- Add this for CORS
     # ---
     'shop', # <-- Make sure this is included
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware', # Add this first
+    'corsheaders.middleware.CorsMiddleware', # <-- Add this first for CORS
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -135,15 +136,21 @@ CORS_ALLOWED_ORIGINS = [
     # "https://yourdomain.com",
 ]
 
+# Optional: Allow credentials (cookies, authorization headers) to be sent cross-origin
+# Only needed if you plan to use cookies for auth or similar
+# CORS_ALLOW_CREDENTIALS = True
+
 # REST Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    # Removed DEFAULT_PERMISSION_CLASSES here, will be handled in views.py
+    # --- KEY CHANGE: Removed DEFAULT_PERMISSION_CLASSES ---
+    # This was causing the 401 error for unauthenticated GET requests
     # 'DEFAULT_PERMISSION_CLASSES': [
     #     'rest_framework.permissions.IsAuthenticated',
     # ],
+    # --- ---
 }
 
 # JWT settings
